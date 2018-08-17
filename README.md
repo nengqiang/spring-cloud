@@ -16,3 +16,9 @@
  The templates directory stores the template engine files. We can create a file under templates: index.ftl 
  (freemarker default suffix is .ftl)
  
+### eureka-server module
+### eureka-client module
+ * &nbsp;&nbsp; Service registration and discovery (Eureka) (Finchley version)
+ * &nbsp;&nbsp; Spring cloud provides developers with tools to quickly build distributed systems, 
+ including configuration management, service discovery, circuit breakers, routing, micro-proxies, event buses, global locks, 
+ decision-making campaigns, distributed sessions, and more. It runs in a simple environment and can run on the developer's computer.

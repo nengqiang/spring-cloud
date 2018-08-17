@@ -6,4 +6,5 @@
 out
 gen
 */target
-.gitignore
+
+!*/.mvn/wrapper/maven-wrapper.jar
