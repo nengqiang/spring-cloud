@@ -44,7 +44,7 @@
    * Visit http://localhost:8764/hi?name=eureka multiple times on the browser, and the browser alternates:  
      Hi eureka,i am from port:8762  
      Hi eureka,i am from port:8763  
- * Architecture：
+ * Architecture：  
  ![Image text](images/structure.png)  
   * A service registry, eureka server, port is 8761
   * The service-hi project ran two instances, the ports are 8762, 8763, respectively registered with the service registry
