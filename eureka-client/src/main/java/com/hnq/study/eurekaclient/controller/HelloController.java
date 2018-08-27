@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018/8/17
  */
 @RestController
-@RequestMapping("/hello")
 public class HelloController {
 
     @Value("${server.port}")
