@@ -51,3 +51,20 @@
   * The service-ribbon port is 8764, registered with the service registry
   * When sercvice-ribbon calls service-hi's hi interface through restTemplate, because load balancing is performed with 
   ribbon, service-hi:8762 and 8763 two ports' hi interfaces are called in turn.
+ ### service-feign module
+  * Feign is a declarative pseudo-Http client that makes writing Http clients easier. With Feign, you only need to 
+  create an interface and annotate it. It has pluggable annotation features and can use Feign annotations and JAX-RS 
+  annotations. Feign supports pluggable encoders and decoders. Feign integrates Ribbon by default and combines with 
+  Eureka to achieve load balancing by default.  
+  * in short:  
+    * Feign uses interface-based annotations
+    * Feign integrates ribbon  
+  * Steps：  
+    * Start EurekaServerApplication
+    * Start EurekaClient01Application
+    * Modify eureka-client's port from 8762 to 8763 in application.yml 
+    * Start EurekaClient02Application
+    * Start ServiceFeignApplication
+    * Visit http://localhost:8765/hi?name=eureka multiple times on the browser, and the browser alternates:  
+      Hi eureka,i am from port:8762  
+      Hi eureka,i am from port:8763  
