@@ -60,6 +60,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
         </dependency>
+
+        <!-- 本身实现断路处理不需要引入spring-cloud-starter-hystrix这个jar就可以实现，但是要加入监控则还是需要引入下面这个jar包 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
