@@ -106,7 +106,7 @@
  registration and discovery, service consumption, load balancing, circuit breakers, intelligent routing, configuration 
  management, etc., and these basic components work together to form a common Simple microservice system. 
  A simple microservice system is shown below:      
- ![Image text](images/simpleMicroService.png)   
+ ![Image text](images/microService.png)   
  In the Spring Cloud microservice system, a common load balancing method is that the client's request is first 
  load-balanced (zuul, Nginx), then to the service gateway (zuul cluster), and then to the specific service. The service 
  is uniformly registered to the highly available service registry cluster. All configuration files of the service are 
