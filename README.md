@@ -51,6 +51,7 @@
   * The service-ribbon port is 8764, registered with the service registry
   * When service-ribbon calls service-hi's hi interface through restTemplate, because load balancing is performed with 
   ribbon, service-hi:8762 and 8763 two ports' hi interfaces are called in turn.
+  
 ### service-feign module
   * Feign is a declarative pseudo-Http client that makes writing Http clients easier. With Feign, you only need to 
   create an interface and annotate it. It has pluggable annotation features and can use Feign annotations and JAX-RS 
@@ -91,14 +92,49 @@
    * Start EurekaClient01Application
    * Start ServiceRibbonApplication
    * Start ServiceFeignApplication
-   * Visit http://localhost:8764/hi?name=eureka, The web page displays:
-     Hi eureka,i am from port:8762
-   * Visit http://localhost:8765/hi?name=eureka, The web page displays:
-        Hi eureka,i am from port:8762   
+   * Visit http://localhost:8764/hi?name=eureka, The web page displays: Hi eureka,i am from port:8762
+   * Visit http://localhost:8765/hi?name=eureka, The web page displays: Hi eureka,i am from port:8762   
    * Stop EurekaClient01Application
-   * Visit http://localhost:8764/hi?name=eureka, The web page displays:
-     hi, eureka, Sorry, there has occurred an error!
-   * Visit http://localhost:8765/hi?name=eureka, The web page displays:
-        hi, eureka, Sorry, there has occurred an error! This proves that the circuit breaker is working.  
+   * Visit http://localhost:8764/hi?name=eureka, The web page displays: hi, eureka, Sorry, there has occurred an error!
+   * Visit http://localhost:8765/hi?name=eureka, The web page displays: hi, eureka, Sorry, there has occurred an error!   
+   This proves that the circuit breaker is working.  
    * Visit http://localhost:8764/hystrix, The web page displays Hystrix Dashboard.
- 
+
+### service-zuul module
+ * Routing gateway(路由网关)  
+ In the micro-service architecture, several basic service governance components are needed, including service 
+ registration and discovery, service consumption, load balancing, circuit breakers, intelligent routing, configuration 
+ management, etc., and these basic components work together to form a common Simple microservice system. 
+ A simple microservice system is shown below:      
+ ![Image text](images/simpleMicroService.png)   
+ In the Spring Cloud microservice system, a common load balancing method is that the client's request is first 
+ load-balanced (zuul, Nginx), then to the service gateway (zuul cluster), and then to the specific service. The service 
+ is uniformly registered to the highly available service registry cluster. All configuration files of the service are 
+ managed by the configuration service, and the configuration file of the configuration service is placed in the git 
+ repository, so that the developer can change the configuration at any time.  
+ * Introduction to Zuul  
+ The main functions of Zuul are route forwarding and filters. The routing function is part of the microservice, such as 
+ /api/user forwarded to the user service, /api/shop forwarded to the shop service. 
+ Zuul combines with Ribbon to implement load balancing.
+ * Zuul has the following features:
+   * Authentication
+   * Insights
+   * Stress Testing
+   * Canary Testing
+   * Dynamic Routing
+   * Service Migration
+   * Load Shedding
+   * Security
+   * Static Response handling
+   * Active/Active traffic management
+ * Steps:
+    * Start EurekaServerApplication
+    * Start EurekaClient01Application
+    * Start ServiceRibbonApplication
+    * Start ServiceFeignApplication
+    * Start ZuulApplication
+    * Visit http://localhost:8766/api-a/hi?name=eureka, The web page displays: token is empty
+    * Visit http://localhost:8766/api-a/hi?name=eurekaA&token=12, The web page displays: Hi eurekaA,i am from port:8762 
+    * Visit http://localhost:8766/api-b/hi?name=eurekaB&token=21, The web page displays: Hi eurekaB,i am from port:8762  
+    This shows that zuul plays the role of routing: Requests starting with /api-a/ are forwarded to the service-ribbon 
+    service; requests beginning with /api-b/ are forwarded to the service-feign service.
