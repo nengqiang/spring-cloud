@@ -69,6 +69,7 @@
     * Visit http://localhost:8765/hi?name=eureka multiple times on the browser, and the browser alternates:  
       Hi eureka,i am from port:8762  
       Hi eureka,i am from port:8763 
+      
 ### Hystrix（断路器）
  * In the micro-service architecture, services are split into services according to the service. The services and services 
  can be called by each other (RPC). In SpringCloud, they can be called with RestTemplate+Ribbon and Feign. To ensure 
@@ -138,3 +139,54 @@
     * Visit http://localhost:8766/api-b/hi?name=eurekaB&token=21, The web page displays: Hi eurekaB,i am from port:8762  
     This shows that zuul plays the role of routing: Requests starting with /api-a/ are forwarded to the service-ribbon 
     service; requests beginning with /api-b/ are forwarded to the service-feign service.
+    
+### config-server module
+### config-client module
+ * In a distributed system, due to the large number of services, in order to facilitate unified management of service 
+ configuration files and real-time updates, a distributed configuration center component is required. In Spring Cloud, 
+ there is a distributed configuration hub component spring cloud config that supports configuration services in the 
+ memory of the configuration service (ie local) and also in remote Git repositories. In the spring cloud config 
+ component, there are two roles, one is config server and the other is config client.
+ * config-client-dev.properties see 
+ [Configuration link](https://github.com/nengqiang/spring-cloud-config/blob/master/config/config-client-dev.properties)
+ * Note that the configuration file name of spring cloud config client 
+ is bootstrap.properties instead of application.properties
+ * Steps:
+   * Start ConfigServerApplication
+   * Visit http://localhost:8767/config-client/dev, The web page displays:   
+   {"name":"config-client","profiles":["dev"],"label":"master","version":"e46301faa736e7dbeac6f095d122147f36a13eb3",
+   "state":null,"propertySources":
+   [{"name":"https://github.com/nengqiang/spring-cloud-config/config/config-client-dev.properties",
+   "source":{"configclient.message":"I'm in github's repository","turkey":"turkey version 1"}}]}  
+   This proves that the remote program can get configuration information from the configuration service center.  
+   The http request address and resource file mapping are as follows:
+     * /{application}/{profile}[/{label}]
+     * /{application}-{profile}.yml
+     * /{label}/{application}-{profile}.yml
+     * /{application}-{profile}.properties
+     * /{label}/{application}-{profile}.properties
+   * Start ConfigClientApplication
+   * Visit http://localhost:8768/hi, The web page displays: turkey version 1  
+   This shows that config-client gets the turkey property from config-server, and config-server is read from 
+   the git repository, as shown in Figure:  
+   ![Image text](images/cloudConfig.png)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
