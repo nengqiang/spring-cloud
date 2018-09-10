@@ -171,6 +171,12 @@
    the git repository, as shown in Figure:  
    ![Image text](images/cloudConfig.png)
  
+### Highly available distributed configuration center
+ * A service can read files from the configuration center. The configuration center can read configuration files from 
+ remote git. When there are many service instances, the files are read from the configuration center. In this case, 
+ consider configuring the configuration center as a micro service. Clustered to achieve high availability, 
+ the architecture diagram is as follows:  
+ ![Image text](images/configStructure.png)  
  
  
  
