@@ -93,13 +93,13 @@
    * Start EurekaClient01Application
    * Start ServiceRibbonApplication
    * Start ServiceFeignApplication
-   * Visit http://localhost:8764/hi?name=eureka, The web page displays: Hi eureka,i am from port:8762
-   * Visit http://localhost:8765/hi?name=eureka, The web page displays: Hi eureka,i am from port:8762   
+   * Visit http://localhost:8764/hi?name=eureka. The web page displays: Hi eureka,i am from port:8762
+   * Visit http://localhost:8765/hi?name=eureka. The web page displays: Hi eureka,i am from port:8762   
    * Stop EurekaClient01Application
-   * Visit http://localhost:8764/hi?name=eureka, The web page displays: hi, eureka, Sorry, there has occurred an error!
-   * Visit http://localhost:8765/hi?name=eureka, The web page displays: hi, eureka, Sorry, there has occurred an error!   
+   * Visit http://localhost:8764/hi?name=eureka. The web page displays: hi, eureka, Sorry, there has occurred an error!
+   * Visit http://localhost:8765/hi?name=eureka. The web page displays: hi, eureka, Sorry, there has occurred an error!   
    This proves that the circuit breaker is working.  
-   * Visit http://localhost:8764/hystrix, The web page displays Hystrix Dashboard.
+   * Visit http://localhost:8764/hystrix. The web page displays Hystrix Dashboard.
 
 ### service-zuul module
  * Routing gateway(路由网关)  
@@ -134,9 +134,9 @@
     * Start ServiceRibbonApplication
     * Start ServiceFeignApplication
     * Start ZuulApplication
-    * Visit http://localhost:8766/api-a/hi?name=eureka, The web page displays: token is empty
-    * Visit http://localhost:8766/api-a/hi?name=eurekaA&token=12, The web page displays: Hi eurekaA,i am from port:8762 
-    * Visit http://localhost:8766/api-b/hi?name=eurekaB&token=21, The web page displays: Hi eurekaB,i am from port:8762  
+    * Visit http://localhost:8766/api-a/hi?name=eureka. The web page displays: token is empty
+    * Visit http://localhost:8766/api-a/hi?name=eurekaA&token=12. The web page displays: Hi eurekaA,i am from port:8762 
+    * Visit http://localhost:8766/api-b/hi?name=eurekaB&token=21. The web page displays: Hi eurekaB,i am from port:8762  
     This shows that zuul plays the role of routing: Requests starting with /api-a/ are forwarded to the service-ribbon 
     service; requests beginning with /api-b/ are forwarded to the service-feign service.
     
@@ -153,7 +153,7 @@
  is bootstrap.properties instead of application.properties
  * Steps:
    * Start ConfigServerApplication
-   * Visit http://localhost:8767/config-client/dev, The web page displays:   
+   * Visit http://localhost:8767/config-client/dev. The web page displays:   
    {"name":"config-client","profiles":["dev"],"label":"master","version":"e46301faa736e7dbeac6f095d122147f36a13eb3",
    "state":null,"propertySources":
    [{"name":"https://github.com/nengqiang/spring-cloud-config/config/config-client-dev.properties",
@@ -166,7 +166,7 @@
      * /{application}-{profile}.properties
      * /{label}/{application}-{profile}.properties
    * Start ConfigClientApplication
-   * Visit http://localhost:8768/hi, The web page displays: turkey version 1  
+   * Visit http://localhost:8768/hi. The web page displays: turkey version 1  
    This shows that config-client gets the turkey property from config-server, and config-server is read from 
    the git repository, as shown in Figure:  
    ![Image text](images/cloudConfig.png)
@@ -177,9 +177,42 @@
  consider configuring the configuration center as a micro service. Clustered to achieve high availability, 
  the architecture diagram is as follows:  
  ![Image text](images/configStructure.png)  
- 
- 
- 
+ * Steps:
+   * Start EurekaServerApplication
+   * Start ConfigServerApplication
+   * Start ConfigClientApplication
+   * Visit http://localhost:8761/ we can see both config-server and config-client are already registered to the 
+   service center.
+   * Visit http://localhost:8768/hi. The web page displays: turkey version 1
+
+### Spring Cloud Bus 
+ * Spring Cloud Bus connects distributed nodes with lightweight message brokers. It can be used for broadcast profile 
+ changes or for communication between services, as well as for monitoring.
+ * Plus start-up depends on spring-cloud-starter-bus-amqp to config-client module
+ * Integrates rabbitmq
+ * Attention:
+   * spring.rabbitmq.port=5672 instead of 15672
+   * Add management.security.enabled=false to application.properties to prevent requests(POST) from refresh to report 
+   permission issues
+   * The class that injects the parameter should be annotated with @RefreshScope. Note that this annotation does not 
+   have to be added to the class where the main method is located, but to the class that has the parameters injected 
+   from configServer.
+ * Steps:
+   * Start EurekaServerApplication
+   * Start ConfigServerApplication
+   * Start ConfigClient01Application
+   * Modify the server port of config-client to 8769
+   * Start ConfigClient02Application
+   * Visit http://localhost:8768/hi. The web page displays: turkey version 1
+   * Visit http://localhost:8769/hi. The web page displays: turkey version 1
+   * Modify the config-client-dev.properties, upgrade the turkey version
+   * Use PostMan to send POST request: http://localhost:8768/bus/refresh
+   * Visit http://localhost:8768/hi. The web page displays: turkey version 2.1(Modified version)
+   * Visit http://localhost:8769/hi. The web page displays: turkey version 2.1(Modified version)  
+   It means The entire microservice cluster has reached the goal of updating the configuration file, and we don't have
+   to restart the application.  
+   the architecture diagram is as follows:  
+   ![Image text](images/busStructure.png)  
  
  
  
