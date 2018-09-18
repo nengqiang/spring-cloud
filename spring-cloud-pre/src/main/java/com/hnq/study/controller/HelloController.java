@@ -23,7 +23,7 @@ public class HelloController {
     }
 
     @RequestMapping("/aliyun")
-    public String createAAliyun() {
+    public String createAliyun() {
         return JSON.toJSONString(aliyun);
     }
 

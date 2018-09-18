@@ -149,8 +149,8 @@
  component, there are two roles, one is config server and the other is config client.
  * config-client-dev.properties see 
  [Configuration link](https://github.com/nengqiang/spring-cloud-config/blob/master/config/config-client-dev.properties)
- * Note that the configuration file name of spring cloud config client 
- is bootstrap.properties instead of application.properties
+ * Note that the configuration file name of spring cloud config client is bootstrap.properties 
+ instead of application.properties
  * Steps:
    * Start ConfigServerApplication
    * Visit http://localhost:8767/config-client/dev. The web page displays:   
@@ -180,7 +180,7 @@
  * Steps:
    * Start EurekaServerApplication
    * Start ConfigServerApplication
-   * Start ConfigClientApplication
+   * Start ConfigClient01Application
    * Visit http://localhost:8761/ we can see both config-server and config-client are already registered to the 
    service center.
    * Visit http://localhost:8768/hi. The web page displays: turkey version 1
@@ -214,6 +214,24 @@
    the architecture diagram is as follows:  
    ![Image text](images/busStructure.png)  
  
+### server-zipkin module
+### service-hi module
+### service-hello module
+ * Service tracking component zipkin
+ * On the micro-service architecture, services are used to divide services. Through an REST call, an external interface 
+ may require a large number of service collaborations to complete the interface function. If any service on the link has 
+ a problem or the network times out, the interface will be formed. The call failed. As the business continues to expand, 
+ calls between services become more complex.  
+ As more services become available, the analysis of the call chain becomes more complex.
+ * Note: Every service's controller(not server's) should contains Bean of AlwaysSampler, otherwise it will not be tracked.
+ * Steps:
+   * Start ServerZipkinApplication
+   * Start ServiceHiApplication
+   * Start ServiceHelloApplication
+   * Visit http://localhost:9411/. The web page displays the dashboard of zipkin.
+   * Visit http://localhost:8988/hi. The web page displays: I'm service-hi
+   * Then open the http://localhost:9411/ interface and click Dependencies to discover the dependencies of the service:  
+   service-hi------>service-hello
  
  
  
