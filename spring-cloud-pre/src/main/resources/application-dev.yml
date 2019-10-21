@@ -6,9 +6,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://192.168.5.241:3306/hanif?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+    url: jdbc:mysql://dev:3306/hanif?useUnicode=true&characterEncoding=UTF-8&useSSL=true
     username: root
-    password: dashu0701
+    password:
     driver-class-name: com.mysql.jdbc.Driver
 
 # 假设一个需求是这样的：项目要求使用阿里云的 OSS 进行文件上传。我们知道，一个项目一般会分为开发环境、测试环境和生产环境。
